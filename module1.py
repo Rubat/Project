@@ -14,7 +14,6 @@ kernel1 = np.ones((1,2),np.uint8)
 #This is where the video is read
 while cap.isOpened():
 
-
     ret, frame = cap.read()
     if not ret:
         break
