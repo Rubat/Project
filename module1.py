@@ -11,6 +11,7 @@ kernel = np.ones((2,2),np.uint8)
 kernel1 = np.ones((1,2),np.uint8)
 #mask = cv2.dilate(mask, kernel, iterations=1)
 
+#This is where the video is read
 while cap.isOpened():
 
 
