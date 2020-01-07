@@ -1,9 +1,10 @@
 import cv2
 import numpy as np
-import math
 
+# Reading Video
 cap = cv2.VideoCapture('5.mp4')
 
+#Background Subtraction
 mask = cv2.createBackgroundSubtractorMOG2(history=1, varThreshold=15, detectShadows=False)
 kernel = np.ones((2,2),np.uint8)
 kernel1 = np.ones((1,2),np.uint8)
@@ -16,8 +17,11 @@ while cap.isOpened():
     if not ret:
         break
     mask1 = mask.apply(frame)
+    # Erosion
     mask1 = cv2.erode(mask1, kernel, iterations=1)
+    # Dialtion
     mask1 = cv2.dilate(mask1, kernel1, iterations=3)
+    # Morphing
     #mask1 = cv2.morphologyEx(mask1, cv2.MORPH_OPEN, kernel)
     #mask1 = cv2.morphologyEx(mask1, cv2.MORPH_CLOSE, kernel)
 
