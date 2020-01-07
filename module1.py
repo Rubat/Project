@@ -13,7 +13,7 @@ kernel1 = np.ones((1,2),np.uint8)
 
 while cap.isOpened():
 
-    # print(aw)
+
     ret, frame = cap.read()
     if not ret:
         break
