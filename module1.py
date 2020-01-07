@@ -9,7 +9,6 @@ mask = cv2.createBackgroundSubtractorMOG2(history=1, varThreshold=15, detectShad
 #Making matrix for Erosion, dilation and morphing
 kernel = np.ones((2,2),np.uint8)
 kernel1 = np.ones((1,2),np.uint8)
-#mask = cv2.dilate(mask, kernel, iterations=1)
 
 #This is where the video is read
 while cap.isOpened():
