@@ -25,7 +25,7 @@ while cap.isOpened():
     mask1 = cv2.dilate(mask1, kernel1, iterations=3)
     # Morphing
     # mask1 = cv2.morphologyEx(mask1, cv2.MORPH_OPEN, kernel)
-    # mask1 = cv2.morphologyEx(mask1, cv2.MORPH_CLOSE, kernel)
+    mask1 = cv2.morphologyEx(mask1, cv2.MORPH_CLOSE, kernel)
 
     contours, _ = cv2.findContours(mask1.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -34,7 +34,16 @@ while cap.isOpened():
             continue
         elif cv2.contourArea(c) > 2000:
             (x, y, w, h) = cv2.boundingRect(c)
-            cv2.rectangle(frame, (x, y), (x + int(w), y + int(h)), (255, 255, 255), 2)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 2)
+
+            # dst = np.zeros_like(frame)
+            # dst[y:y+h, x:x+w] = frame[y:y+h, x:x+w]
+
+            # mask3 = np.zeros(frame.shape, dtype=np.uint8)
+            # cv2.fillPoly(mask3, pts=[c], color=(255,255,255))
+            #
+            # # apply the mask
+            # masked_image = cv2.bitwise_and(frame, mask3)
 
             upper_left = (x, y)
             bottom_right = (x + w, y + h)
@@ -53,8 +62,8 @@ while cap.isOpened():
 
             # Erosion
             mask2 = cv2.erode(mask2, kernel, iterations=4)
-            # Dialtion
-            mask2 = cv2.dilate(mask2, kernel1, iterations=4)
+            # Dilation
+            mask2 = cv2.dilate(mask2, kernel1, iterations=6)
             # Morphing
             # mask2 = cv2.morphologyEx(mask2, cv2.MORPH_OPEN, kernel)
             # mask2 = cv2.morphologyEx(mask2, cv2.MORPH_CLOSE, kernel)
@@ -69,11 +78,18 @@ while cap.isOpened():
                 x, y, w, h = cv2.boundingRect(b)
                 # draw a green rectangle to visualize the bounding rect2
                 cv2.rectangle(frame1, (x, y), (x + w, y + h), (0, 255, 0), 1)
+                mask3 = np.zeros(frame.shape, dtype=np.uint8)
+                cv2.fillPoly(mask3, pts=[c], color=(255, 255, 255))
+
+                # apply the mask
+                masked_image = cv2.bitwise_and(frame, mask3)
 
     # cv2.imshow('result', mask1)
     # cv2.imshow('result', mask2)
-    cv2.imshow('result', frame)
-    # cv2.imshow('result', black_bg)
+    # cv2.imshow('result', mask3)
+    cv2.imshow('result', masked_image)
+    # cv2.imshow('result', frame)
+    # cv2.imshow('result', dst)
     k = cv2.waitKey(100) & 0xFF
     if k == 27:
         break
