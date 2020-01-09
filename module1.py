@@ -33,11 +33,16 @@ while cap.isOpened():
         elif cv2.contourArea(c) > 2000:
             (x, y, w, h) = cv2.boundingRect(c)
             cv2.rectangle(frame, (x, y), (x + int(w), y + int(h)), (255, 255, 255), 2)
-        
 
-    cv2.imshow('result', mask1)
+
+            roi = frame[y:y+h, x:x+w]
+            black_bg = 0 * np.ones_like(frame)
+            black_bg[y:y+h, x:x+w] = roi
+
+    # cv2.imshow('result', mask1)
     cv2.imshow('result', frame)
-    k = cv2.waitKey(100) & 0xFF
+    # cv2.imshow('result', black_bg)
+    k = cv2.waitKey(50) & 0xFF
     if k == 27:
         break
 

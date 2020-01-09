@@ -93,11 +93,11 @@ while cap.isOpened():
             # w = (pw + w) / 2
             # h = (ph + h) / 2
             ww = (1 - f) * pw + f * w
-            if ww > 105:
-                ww = 105
+            # if ww > 105:
+            #     ww = 105
             wh = (1 - f) * ph + f * h
-            if wh > 135:
-                wh = 135
+            # if wh > 135:
+            #     wh = 135
             # ww = 105
             # wh = 135
             # print(ww)
