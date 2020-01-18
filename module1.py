@@ -36,13 +36,13 @@ while cap.isOpened():
             (x, y, w, h) = cv2.boundingRect(c)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 2)
 
-            # dst = np.zeros_like(frame)
-            # dst[y:y+h, x:x+w] = frame[y:y+h, x:x+w]
+            dst = np.zeros_like(frame)
+            dst[y:y+h, x:x+w] = frame[y:y+h, x:x+w]
 
             # mask3 = np.zeros(frame.shape, dtype=np.uint8)
             # cv2.fillPoly(mask3, pts=[c], color=(255,255,255))
             #
-            # # apply the mask
+            # #apply the mask
             # masked_image = cv2.bitwise_and(frame, mask3)
 
             upper_left = (x, y)
@@ -54,10 +54,10 @@ while cap.isOpened():
 
             blurred_frame = cv2.GaussianBlur(frame1, (5, 5), 0)
             # hsv1 = cv2.cvtColor(blurred_frame, cv2.COLOR_BGR2RGB)
-            hsv = cv2.cvtColor(blurred_frame, cv2.COLOR_BGR2HSV)
+            hsv = cv2.cvtColor(blurred_frame, cv2.COLOR_RGB2HSV)
 
-            lower_red = np.array([38, 86, 0])
-            upper_red = np.array([121, 255, 255])
+            lower_red = np.array([110, 50, 50])
+            upper_red = np.array([130, 255, 255])
             mask2 = cv2.inRange(hsv, lower_red, upper_red)
 
             # Erosion
@@ -74,22 +74,28 @@ while cap.isOpened():
                 cv2.drawContours(frame1, contour, -1, (0, 0, 0), 1)
 
             for b in contours:
+                if cv2.contourArea(b) <250:
+                    continue
                 # get the bounding rect
-                x, y, w, h = cv2.boundingRect(b)
-                # draw a green rectangle to visualize the bounding rect2
-                cv2.rectangle(frame1, (x, y), (x + w, y + h), (0, 255, 0), 1)
-                mask3 = np.zeros(frame.shape, dtype=np.uint8)
-                cv2.fillPoly(mask3, pts=[c], color=(255, 255, 255))
+                elif cv2. contourArea(b) >350:
+                    x, y, w, h = cv2.boundingRect(b)
+                    # draw a green rectangle to visualize the bounding rect2
+                    cv2.rectangle(frame1, (x, y), (x + w, y + h), (0, 255, 0), 1)
+                    mask3 = np.zeros(frame.shape, dtype=np.uint8)
+                    cv2.fillPoly(mask3, pts=[c], color=(255, 255, 255))
 
-                # apply the mask
-                masked_image = cv2.bitwise_and(frame, mask3)
+                    # print(cv2.contourArea(b))
+
+                    # apply the mask
+                    masked_image = cv2.bitwise_and(frame, mask3)
+
 
     # cv2.imshow('result', mask1)
     # cv2.imshow('result', mask2)
     # cv2.imshow('result', mask3)
-    cv2.imshow('result', masked_image)
+    # cv2.imshow('result', masked_image)
     # cv2.imshow('result', frame)
-    # cv2.imshow('result', dst)
+    cv2.imshow('result', dst)
     k = cv2.waitKey(100) & 0xFF
     if k == 27:
         break
