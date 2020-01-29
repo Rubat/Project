@@ -94,9 +94,9 @@ while cap.isOpened():
     # cv2.imshow('result', mask2)
     # cv2.imshow('result', mask3)
     # cv2.imshow('result', masked_image)
-    # cv2.imshow('result', frame)
-    cv2.imshow('result', dst)
-    k = cv2.waitKey(100) & 0xFF
+    cv2.imshow('result', frame)
+    # cv2.imshow('result', dst)
+    k = cv2.waitKey(50) & 0xFF
     if k == 27:
         break
 
