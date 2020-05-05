@@ -29,10 +29,12 @@ while cap.isOpened():
 
     contours, _ = cv2.findContours(mask1.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+
     for c in contours:
         if cv2.contourArea(c) < 750:
             continue
         elif cv2.contourArea(c) > 2000:
+            # print(len(contours))
             (x, y, w, h) = cv2.boundingRect(c)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 2)
 
@@ -68,10 +70,27 @@ while cap.isOpened():
             # mask2 = cv2.morphologyEx(mask2, cv2.MORPH_OPEN, kernel)
             # mask2 = cv2.morphologyEx(mask2, cv2.MORPH_CLOSE, kernel)
 
+            mask3 = np.zeros(frame.shape, dtype=np.uint8)
+            cv2.fillPoly(mask3, pts=[c], color=(255, 255, 255))
+            masked_image = cv2.bitwise_and(frame, mask3)
+
             contours, _ = cv2.findContours(mask2, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-            for contour in contours:
-                cv2.drawContours(frame1, contour, -1, (0, 0, 0), 1)
+            # for contour in contours:
+            #     cv2.drawContours(frame1, contour, -1, (0, 0, 0), 1)
+
+                # m = cv2.moments(contour)
+                # if m["m00"] != 0:
+                #     cX= int(m["m10"] / m["m00"])
+                #     cY= int(m["m01"] / m["m00"])
+                # else:
+                #     cX=0
+                #     cY=0
+                #
+                # cv2.circle(frame, (cX, cY), 1, (0, 0, 0), -1)
+                # cv2.putText(frame, "center", (cX - 20, cY - 20),
+                #     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+
 
             for b in contours:
                 if cv2.contourArea(b) <250:
@@ -83,6 +102,16 @@ while cap.isOpened():
                     cv2.rectangle(frame1, (x, y), (x + w, y + h), (0, 255, 0), 1)
                     mask3 = np.zeros(frame.shape, dtype=np.uint8)
                     cv2.fillPoly(mask3, pts=[c], color=(255, 255, 255))
+
+                    m = cv2.moments(b)
+                    if m["m00"] != 0:
+                        cX= int(m["m10"] / m["m00"])
+                        cY= int(m["m01"] / m["m00"])
+                    else:
+                        cX=0
+                        cY=0
+
+                    cv2.circle(frame, (cX, cY), 2, (0, 0, 0), -1)
 
                     # print(cv2.contourArea(b))
 
